@@ -25,7 +25,8 @@ dependencies {
     // Added for AdMob
     compile project(":joketellerlib")
     compile project(":jokedisplaylib")
-    compile 'com.android.support:appcompat-v7:24.0.0-alpha1'
+    compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.google.android.gms:play-services-ads:9.8.0'
-    compile project(path: ':builditbiggerbackend', configuration: 'android-endpoints')
+    compile 'com.google.code.findbugs:jsr305:2.0.1'
+    compile project(path: ':backend', configuration: 'android-endpoints')
 }
