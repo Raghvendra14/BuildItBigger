@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".free.MainActivityFragment">
+    tools:context=".paid.MainActivityFragment">
 
     <TextView
         android:id="@+id/instructions_text_view"
@@ -15,10 +15,10 @@
         android:text="@string/instructions" />
 
     <Button
+        android:id="@+id/joke_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/instructions_text_view"
-        android:onClick="tellJoke"
         android:text="@string/button_text"
 
         />

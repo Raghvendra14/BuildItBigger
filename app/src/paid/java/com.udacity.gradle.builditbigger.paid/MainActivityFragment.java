@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.free;
+package com.udacity.gradle.builditbigger.paid;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,9 +11,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.android.jokedisplaylib.JokeDisplayActivity;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.udacity.gradle.builditbigger.EndpointsAsyncTask;
+import com.udacity.gradle.builditbigger.MainActivity;
 import com.udacity.gradle.builditbigger.R;
 
 
@@ -24,6 +23,7 @@ public class MainActivityFragment extends Fragment {
 
     public EndpointsAsyncTask endpointsAsyncTask;
     private ProgressBar spinner;
+
     public MainActivityFragment() {
     }
 
@@ -40,14 +40,6 @@ public class MainActivityFragment extends Fragment {
                 beginFetchJoke();
             }
         });
-        AdView mAdView = (AdView) root.findViewById(R.id.adView);
-        // Create an ad request. Check logcat output for the hashed device ID to
-        // get test ads on a physical device. e.g.
-        // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .build();
-        mAdView.loadAd(adRequest);
         return root;
     }
 

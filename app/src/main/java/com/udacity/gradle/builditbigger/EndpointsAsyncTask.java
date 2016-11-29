@@ -57,7 +57,7 @@ public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
        asyncTaskResponse.onResponse(isSuccess, result);
     }
 
-    interface AsyncTaskResponse {
+    public interface AsyncTaskResponse {
         void onResponse(boolean isSuccess, String result);
     }
 }
