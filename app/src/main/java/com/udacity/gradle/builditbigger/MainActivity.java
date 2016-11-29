@@ -6,18 +6,23 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.JokeTeller;
 import com.example.android.jokedisplaylib.JokeDisplayActivity;
 
 
-public class MainActivity extends ActionBarActivity implements EndpointsAsyncTask.AsyncTaskResponse {
+public class MainActivity extends ActionBarActivity {
+
+    public EndpointsAsyncTask endpointsAsyncTask;
+    private ProgressBar spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        spinner = (ProgressBar) findViewById(R.id.progress_bar);
+        spinner.setVisibility(View.GONE);
     }
 
 
@@ -44,17 +49,20 @@ public class MainActivity extends ActionBarActivity implements EndpointsAsyncTas
     }
 
     public void tellJoke(View view) {
-        new EndpointsAsyncTask(MainActivity.this).execute();
-    }
-
-    @Override
-    public void onResponse(boolean isSuccess, String result) {
-        if(isSuccess) {
-            Intent intent = new Intent(this, JokeDisplayActivity.class);
-            intent.putExtra(JokeDisplayActivity.JOKE_KEY, result);
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "Sorry! No Joke Available", Toast.LENGTH_LONG).show();
-        }
+        spinner.setVisibility(View.VISIBLE);
+        endpointsAsyncTask = new EndpointsAsyncTask(new EndpointsAsyncTask.AsyncTaskResponse() {
+            @Override
+            public void onResponse(boolean isSuccess, String result) {
+                spinner.setVisibility(View.GONE);
+                if(isSuccess) {
+                    Intent intent = new Intent(MainActivity.this, JokeDisplayActivity.class);
+                    intent.putExtra(JokeDisplayActivity.JOKE_KEY, result);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(MainActivity.this, R.string.no_joke_available, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        endpointsAsyncTask.execute();
     }
 }
