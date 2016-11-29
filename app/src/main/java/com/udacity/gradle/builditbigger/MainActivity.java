@@ -1,19 +1,18 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.JokeTeller;
 import com.example.android.jokedisplaylib.JokeDisplayActivity;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements EndpointsAsyncTask.AsyncTaskResponse {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +44,17 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void tellJoke(View view) {
-        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
-
-        Intent intent = new Intent(this, JokeDisplayActivity.class);
-        JokeTeller jokeTeller = new JokeTeller();
-        intent.putExtra(JokeDisplayActivity.JOKE_KEY, jokeTeller.tellJoke());
-        startActivity(intent);
-//        Toast.makeText(this, jokeTeller.getJoke(), Toast.LENGTH_SHORT).show();
+        new EndpointsAsyncTask(MainActivity.this).execute();
     }
 
-
+    @Override
+    public void onResponse(boolean isSuccess, String result) {
+        if(isSuccess) {
+            Intent intent = new Intent(this, JokeDisplayActivity.class);
+            intent.putExtra(JokeDisplayActivity.JOKE_KEY, result);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "Sorry! No Joke Available", Toast.LENGTH_LONG).show();
+        }
+    }
 }
