@@ -11,8 +11,10 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.android.jokedisplaylib.JokeDisplayActivity;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.udacity.gradle.builditbigger.EndpointsAsyncTask;
 import com.udacity.gradle.builditbigger.R;
 
@@ -22,8 +24,11 @@ import com.udacity.gradle.builditbigger.R;
  */
 public class MainActivityFragment extends Fragment {
 
+    private InterstitialAd interstitialAd;
+    private AdView mAdView;
     public EndpointsAsyncTask endpointsAsyncTask;
     private ProgressBar spinner;
+
     public MainActivityFragment() {
     }
 
@@ -33,24 +38,43 @@ public class MainActivityFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
         spinner = (ProgressBar) root.findViewById(R.id.progress_bar);
         spinner.setVisibility(View.GONE);
+
+        mAdView = (AdView) root.findViewById(R.id.adView);
+        interstitialAd = new InterstitialAd(getActivity());
+        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        interstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitial();
+                beginFetchJoke();
+            }
+        });
+        requestNewInterstitial();
+
         Button mButton = (Button) root.findViewById(R.id.joke_button);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                beginFetchJoke();
+                if (interstitialAd.isLoaded()) {
+                    interstitialAd.show();
+                } else {
+                    beginFetchJoke();
+                }
             }
         });
-        AdView mAdView = (AdView) root.findViewById(R.id.adView);
+        return root;
+    }
+
+    private void requestNewInterstitial() {
         // Create an ad request. Check logcat output for the hashed device ID to
         // get test ads on a physical device. e.g.
         // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
+        interstitialAd.loadAd(adRequest);
         mAdView.loadAd(adRequest);
-        return root;
     }
-
     private void beginFetchJoke() {
         spinner.setVisibility(View.VISIBLE);
         endpointsAsyncTask = new EndpointsAsyncTask(new EndpointsAsyncTask.AsyncTaskResponse() {
