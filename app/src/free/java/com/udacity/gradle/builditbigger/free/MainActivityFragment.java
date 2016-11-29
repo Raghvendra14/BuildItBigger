@@ -18,16 +18,28 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.udacity.gradle.builditbigger.EndpointsAsyncTask;
 import com.udacity.gradle.builditbigger.R;
 
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment {
 
-    private InterstitialAd interstitialAd;
-    private AdView mAdView;
     public EndpointsAsyncTask endpointsAsyncTask;
-    private ProgressBar spinner;
+    private InterstitialAd interstitialAd;
+    @BindView(R.id.adView)
+    AdView mAdView;
+    @BindView(R.id.progress_bar)
+    ProgressBar spinner;
+    @BindView(R.id.joke_button)
+    Button mButton;
+    @BindString(R.string.no_joke_available) String noJokeString;
+    @BindString(R.string.interstitial_unit_id) String interstitialId;
+    private Unbinder unbinder;
 
     public MainActivityFragment() {
     }
@@ -36,12 +48,11 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
-        spinner = (ProgressBar) root.findViewById(R.id.progress_bar);
+        unbinder = ButterKnife.bind(this, root);
         spinner.setVisibility(View.GONE);
 
-        mAdView = (AdView) root.findViewById(R.id.adView);
         interstitialAd = new InterstitialAd(getActivity());
-        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        interstitialAd.setAdUnitId(interstitialId);
         interstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
@@ -51,7 +62,6 @@ public class MainActivityFragment extends Fragment {
         });
         requestNewInterstitial();
 
-        Button mButton = (Button) root.findViewById(R.id.joke_button);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,10 +96,16 @@ public class MainActivityFragment extends Fragment {
                     intent.putExtra(JokeDisplayActivity.JOKE_KEY, result);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(getActivity(), R.string.no_joke_available, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), noJokeString, Toast.LENGTH_LONG).show();
                 }
             }
         });
         endpointsAsyncTask.execute();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

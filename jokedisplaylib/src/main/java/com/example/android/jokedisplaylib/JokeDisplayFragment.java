@@ -15,7 +15,6 @@ import android.widget.TextView;
  */
 public class JokeDisplayFragment extends Fragment {
 
-
     public JokeDisplayFragment() {
     }
 
