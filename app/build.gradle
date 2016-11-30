@@ -35,7 +35,10 @@ android {
             applicationId "com.udacity.gradle.builditbigger.paid"
         }
     }
-    sourceSets { free { java.srcDirs = ['src/free/java', 'src/free/java/'] } }
+    sourceSets {
+        free { java.srcDirs = ['src/free/java', 'src/free/java/'] }
+        paid { java.srcDirs = ['src/paid/java', 'src/paid/java/'] }
+    }
 }
 
 dependencies {
@@ -49,4 +52,6 @@ dependencies {
     androidTestCompile 'com.android.support:support-annotations:24.2.1'
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 }

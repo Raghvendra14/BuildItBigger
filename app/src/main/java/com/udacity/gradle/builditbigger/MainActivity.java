@@ -14,15 +14,12 @@ import com.example.android.jokedisplaylib.JokeDisplayActivity;
 
 public class MainActivity extends ActionBarActivity {
 
-    public EndpointsAsyncTask endpointsAsyncTask;
-    private ProgressBar spinner;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        spinner = (ProgressBar) findViewById(R.id.progress_bar);
-        spinner.setVisibility(View.GONE);
     }
 
 
@@ -48,21 +45,4 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void tellJoke(View view) {
-        spinner.setVisibility(View.VISIBLE);
-        endpointsAsyncTask = new EndpointsAsyncTask(new EndpointsAsyncTask.AsyncTaskResponse() {
-            @Override
-            public void onResponse(boolean isSuccess, String result) {
-                spinner.setVisibility(View.GONE);
-                if(isSuccess) {
-                    Intent intent = new Intent(MainActivity.this, JokeDisplayActivity.class);
-                    intent.putExtra(JokeDisplayActivity.JOKE_KEY, result);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(MainActivity.this, R.string.no_joke_available, Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-        endpointsAsyncTask.execute();
-    }
 }
