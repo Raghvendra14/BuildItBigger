@@ -40,6 +40,7 @@ public class MyEndpoint {
 
     @ApiMethod(name = "showJoke")
     public MyJoke showJoke() {
+
         JokeTeller jokeTeller = new JokeTeller();
         String joke = jokeTeller.tellJoke();
 
