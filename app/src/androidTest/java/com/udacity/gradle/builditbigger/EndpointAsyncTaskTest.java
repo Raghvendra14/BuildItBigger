@@ -2,9 +2,8 @@ package com.udacity.gradle.builditbigger;
 
 import org.junit.Test;
 
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by DELL on 29-11-2016.
@@ -21,7 +20,7 @@ public class EndpointAsyncTaskTest {
     @Test
     public void AsyncTaskTest() throws Exception {
 
-        String result = asyncTask.execute().get(20, TimeUnit.SECONDS);
+        String result = asyncTask.execute().get();
         assertNotNull(result);
         assertTrue("The string is empty!", result.length() > 0);
     }
